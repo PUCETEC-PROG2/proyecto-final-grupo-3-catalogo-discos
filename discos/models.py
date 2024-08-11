@@ -5,7 +5,7 @@ class Artist(models.Model):
     country = models.CharField(max_length=30, null=False)
     picture = models.ImageField(upload_to='artist_images')  
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
-    picture = models.ImageField(upload_to='artist_images')
+
     def __str__(self) -> str:
         return self.name
 

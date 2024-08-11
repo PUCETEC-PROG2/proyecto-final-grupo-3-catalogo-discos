@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 
 from discos.forms import CustomerForm, CategoryForm,ArtistForm, ProductForm
-from .models import Customer, Category,Artist, Product
+from .models import Customer, Category,Artist, Product,Purchase
 
 def index(request):
     products = Product.objects.order_by('title')
@@ -42,6 +42,14 @@ def product(request, product_id):
     template = loader.get_template('display_product.html')
     context = {
         'product': product
+    }
+    return HttpResponse(template.render(context, request))
+
+def purchase(request, purchase_id):
+    purchase = get_object_or_404(Purchase, pk=purchase_id)
+    template = loader.get_template('display_purchase.html')
+    context = {
+        'purchase': purchase
     }
     return HttpResponse(template.render(context, request))
 
@@ -178,13 +186,6 @@ def delete_product(request, id):
     product.delete()
     return redirect("discos:index")
 
-def purchase(request, purchase_id):
-    purchase = get_object_or_404(Purchase, pk=purchase_id)
-    template = loader.get_template('display_purchase.html')
-    context = {
-        'purchase': purchase
-    }
-    return HttpResponse(template.render(context, request))
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'
