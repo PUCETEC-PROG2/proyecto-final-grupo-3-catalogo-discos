@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Compras{% endblock title %}
+{% block content %}
+<h1>Compras</h1>
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Cliente</th>
+        <th>Categoría</th>
+        <th>Fecha</th>
+        <th>Precio Total</th>
+    </tr>
+    {% for purchase in purchases %}
+    <tr>
+        <td>{{ purchase.id }}</td>
+        <td>{{ purchase.customer.name }}</td>
+        <td>{{ purchase.category.category_name }}</td>
+        <td>{{ purchase.date }}</td>
+        <td>{{ purchase.total_price }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

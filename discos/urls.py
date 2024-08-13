@@ -19,6 +19,7 @@ urlpatterns = [
     path('category/delete/<int:id>/', views.delete_category, name='delete_category'),
     path('category/<int:category_id>/', views.category, name='category'),
 
+
     # Artist URLs
     path('artist/add/', views.add_artist, name='add_artist'),
     path('artist/edit/<int:id>/', views.edit_artist, name='edit_artist'),
@@ -37,4 +38,13 @@ urlpatterns = [
 
     # Purchase URL
     path('purchase/<int:purchase_id>/', views.purchase, name='purchase'),
+    path('purchase/add/', views.add_purchase, name='add_purchase'),
+
+
+
+    path('customers/', views.customer_list, name='customer_list'),
+    path('categories/', views.category_list, name='category_list'),
+    path('artists/', views.artist_list, name='artist_list'),
+    path('products/', views.product_list, name='product_list'),
+    path('purchases/', views.purchase_list, name='purchase_list'),
 ]

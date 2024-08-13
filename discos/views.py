@@ -5,13 +5,37 @@ from django.shortcuts import get_object_or_404,redirect,render
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 
-from discos.forms import CustomerForm, CategoryForm,ArtistForm, ProductForm
+from discos.forms import CustomerForm, CategoryForm,ArtistForm, ProductForm, PurchaseForm
 from .models import Customer, Category,Artist, Product,Purchase
 
+def customer_list(request):
+    customers = Customer.objects.all()
+    return render(request, 'customer_list.html', {'customers': customers})
+
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'category_list.html', {'categories': categories})
+
+def artist_list(request):
+    artists = Artist.objects.all()
+    return render(request, 'artist_list.html', {'artists': artists})
+
+def product_list(request):
+    products = Product.objects.all()
+    return render(request, 'product_list.html', {'products': products})
+
+def purchase_list(request):
+    purchases = Purchase.objects.all()
+    return render(request, 'purchase_list.html', {'purchases': purchases})
+
+
+
+
+
+
+
 def index(request):
-    products = Product.objects.order_by('title')
-    template = loader.get_template('index.html')
-    return HttpResponse(template.render({'products': products}, request))
+    return render(request, 'index.html')
 
 def customer(request, customer_id):
     customer = get_object_or_404(Customer, pk=customer_id)
@@ -122,7 +146,7 @@ def delete_category(request, id):
 @login_required
 def add_artist(request):
     if request.method == 'POST':
-        form = ArtistForm(request.POST)
+        form = ArtistForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('discos:index')
@@ -136,7 +160,7 @@ def add_artist(request):
 def edit_artist(request, id):
     artist = get_object_or_404(Artist, pk=id)
     if request.method == 'POST':
-        form = ArtistForm(request.POST, instance=artist)
+        form = ArtistForm(request.POST, request.FILES, instance=artist)
         if form.is_valid():
             form.save()
             return redirect('discos:index')
@@ -186,6 +210,19 @@ def delete_product(request, id):
     product.delete()
     return redirect("discos:index")
 
+
+#PURCHASE
+@login_required
+def add_purchase(request):
+    if request.method == 'POST':
+        form = PurchaseForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('discos:index')
+    else:
+        form = PurchaseForm()
+    
+    return render(request, 'purchase_form.html', {'form': form})
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'

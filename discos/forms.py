@@ -4,7 +4,7 @@ from .models import Customer, Category,Artist, Product,Purchase
 class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = '_all_'
+        fields = '__all__'
         widgets = {
             'identity_card': forms.TextInput(attrs={'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -16,7 +16,7 @@ class CustomerForm(forms.ModelForm):
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = '_all_'
+        fields = '__all__'
         widgets = {
             'category_name': forms.TextInput(attrs={'class': 'form-control'})
         } 
@@ -24,7 +24,7 @@ class CategoryForm(forms.ModelForm):
 class ArtistForm(forms.ModelForm):
     class Meta:
         model = Artist
-        fields = '_all_'
+        fields = '__all__'
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'country': forms.TextInput(attrs={'class': 'form-control'}),
@@ -35,7 +35,7 @@ class ArtistForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = '_all_'
+        fields = '__all__'
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'code': forms.TextInput(attrs={'class': 'form-control'}),
@@ -50,7 +50,7 @@ class ProductForm(forms.ModelForm):
 class PurchaseForm(forms.ModelForm):
     class Meta:
         model = Purchase
-        fields = '_all_'
+        fields = '__all__'
         widgets = {
             'customer': forms.Select(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
