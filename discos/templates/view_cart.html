@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Carrito de Compras{% endblock title %}
+{% block content %}
+<h1>Carrito de Compras</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product_id, item in cart.items %}
+        <tr>
+            <td>{{ item.product.title }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.price|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Total: ${{ total_price }}</h3>
+
+<form method="POST" action="{% url 'discos:view_cart' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.customer.label_tag }} {{ form.customer }}
+    </div>
+    <div class="form-group">
+        {{ form.date.label_tag }} {{ form.date }}
+    </div>
+    <button type="submit" class="btn btn-success">Proceder con la compra</button>
+</form>
+{% endblock %}

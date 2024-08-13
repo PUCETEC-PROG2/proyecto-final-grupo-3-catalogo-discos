@@ -47,4 +47,8 @@ urlpatterns = [
     path('artists/', views.artist_list, name='artist_list'),
     path('products/', views.product_list, name='product_list'),
     path('purchases/', views.purchase_list, name='purchase_list'),
+
+    path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('view_cart/', views.view_cart, name='view_cart'),
+
 ]

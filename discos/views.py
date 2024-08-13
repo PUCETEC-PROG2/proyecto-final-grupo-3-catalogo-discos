@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from discos.forms import CustomerForm, CategoryForm,ArtistForm, ProductForm, PurchaseForm
 from .models import Customer, Category,Artist, Product,Purchase
+from .forms import PurchaseForm
 
 def customer_list(request):
     customers = Customer.objects.all()
@@ -25,13 +26,8 @@ def product_list(request):
     return render(request, 'product_list.html', {'products': products})
 
 def purchase_list(request):
-    purchases = Purchase.objects.all()
+    purchases = Purchase.objects.all().order_by('-date')
     return render(request, 'purchase_list.html', {'purchases': purchases})
-
-
-
-
-
 
 
 def index(request):
@@ -84,7 +80,7 @@ def add_customer(request):
         form = CustomerForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('discos:index')
+            return redirect('discos:customer_list')
     else:
         form = CustomerForm()
     
@@ -97,7 +93,7 @@ def edit_customer(request, id):
         form = CustomerForm(request.POST, instance=customer)
         if form.is_valid():
             form.save()
-            return redirect('discos:index')
+            return redirect('discos:customer_list')
     else:
         form = CustomerForm(instance=customer)
         
@@ -107,7 +103,7 @@ def edit_customer(request, id):
 def delete_customer(request, id):
     customer = get_object_or_404(Customer, pk=id)
     customer.delete()
-    return redirect("discos:index")
+    return redirect("discos:customer_list")
 
 #CATEGORY
 @login_required
@@ -116,7 +112,7 @@ def add_category(request):
         form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('discos:index')
+            return redirect('discos:category_list')
     else:
         form = CategoryForm()
     
@@ -129,7 +125,7 @@ def edit_category(request, id):
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
-            return redirect('discos:index')
+            return redirect('discos:category_list')
     else:
         form = CategoryForm(instance=category)
         
@@ -140,7 +136,7 @@ def edit_category(request, id):
 def delete_category(request, id):
     category = get_object_or_404(Category, pk=id)
     category.delete()
-    return redirect("discos:index")
+    return redirect("discos:category_list")
 
 #ARTIST
 @login_required
@@ -149,7 +145,7 @@ def add_artist(request):
         form = ArtistForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('discos:index')
+            return redirect('discos:artist_list')
     else:
         form = ArtistForm()
     
@@ -163,7 +159,7 @@ def edit_artist(request, id):
         form = ArtistForm(request.POST, request.FILES, instance=artist)
         if form.is_valid():
             form.save()
-            return redirect('discos:index')
+            return redirect('discos:artist_list')
     else:
         form = ArtistForm(instance=artist)
         
@@ -174,7 +170,7 @@ def edit_artist(request, id):
 def delete_artist(request, id):
     artist = get_object_or_404(Artist, pk=id)
     artist.delete()
-    return redirect("discos:index")
+    return redirect("discos:artist_list")
 
 #PRODUCT
 @login_required
@@ -183,7 +179,7 @@ def add_product(request):
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('discos:index')
+            return redirect('discos:product_list')
     else:
         form = ProductForm()
     
@@ -197,7 +193,7 @@ def edit_product(request, id):
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            return redirect('discos:index')
+            return redirect('discos:product_list')
     else:
         form = ProductForm(instance=product)
         
@@ -208,7 +204,7 @@ def edit_product(request, id):
 def delete_product(request, id):
     product = get_object_or_404(Product, pk=id)
     product.delete()
-    return redirect("discos:index")
+    return redirect("discos:product_list")
 
 
 #PURCHASE
@@ -218,11 +214,58 @@ def add_purchase(request):
         form = PurchaseForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('discos:index')
+            return redirect('discos:purchase_list')
     else:
         form = PurchaseForm()
     
     return render(request, 'purchase_form.html', {'form': form})
+
+#revisar bien esto
+@login_required
+def view_cart(request):
+    cart = request.session.get('cart', {})
+    total_price = sum(item['price'] * item['quantity'] for item in cart.values())
+
+    if request.method == 'POST':
+        form = PurchaseForm(request.POST)
+        if form.is_valid():
+            purchase = form.save(commit=False)
+            purchase.total_price = total_price
+            purchase.save()
+
+            for product_id, item in cart.items():
+                product = Product.objects.get(id=product_id)
+                PurchaseProduct.objects.create(
+                    purchase=purchase,
+                    product=product,
+                    quantity=item['quantity']
+                )
+
+            request.session['cart'] = {}  # Vaciar el carrito después de la compra
+            return redirect('discos:purchase_list')
+    else:
+        form = PurchaseForm()
+
+    return render(request, 'view_cart.html', {'cart': cart, 'total_price': total_price, 'form': form})
+
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    cart = request.session.get('cart', {})
+
+    if str(product_id) in cart:
+        cart[str(product_id)]['quantity'] += 1
+    else:
+        cart[str(product_id)] = {
+            'title': product.title,
+            'price': str(product.price),
+            'quantity': 1
+        }
+
+    request.session['cart'] = cart
+    return redirect('discos:product_list')
+#esto tambien 
+
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'

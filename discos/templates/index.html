@@ -17,50 +17,45 @@
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a href="{% url 'discos:category_list' %}" class="btn btn-primary"
-                           style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                             Categorías
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'discos:artist_list' %}" class="btn btn-primary"
-                           style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                             Artistas
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'discos:customer_list' %}" class="btn btn-primary"
-                           style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                             Clientes
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'discos:product_list' %}" class="btn btn-primary"
-                           style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                             Productos
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'discos:purchase_list' %}" class="btn btn-primary"
-                           style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                             Compras
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{% url 'discos:add_product' %}" class="btn btn-primary"
-                           style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                            añadir artista
-                        </a>
-                    </li>
+
                     <li class="nav-item">
                         <a href="{% url 'logout' %}" class="btn btn-primary"
-                           style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                             Logout
                         </a>
                     </li>
                 {% else %}
                     <li class="nav-item">
                         <a href="{% url 'discos:login' %}" class="btn btn-primary"
-                           style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                             Login
                         </a>
                     </li>

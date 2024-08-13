@@ -2,11 +2,21 @@
 {% block title %}Categorías{% endblock title %}
 {% block content %}
 <h1>Categorías</h1>
+
+
+<div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'discos:add_category' %}" class="btn btn-success mr-2">
+    <i class="fa-solid fa-plus"></i> Añadir Categoria
+    </a>
+    <a href="{% url 'discos:index' %}" class="btn btn-secondary">
+        <i class="fa-solid fa-house"></i> Regresar al Inicio</a>
+
+</div>
 <table class="table">
     <tr>
         <th>ID</th>
         <th>Nombre</th>
-        <th></th>
+        <th>Acciones</th>
     </tr>
     {% for category in categories %}
     <tr>
@@ -14,10 +24,10 @@
         <td>{{ category.category_name }}</td>
         <td>
             <a href="{% url 'discos:edit_category' category.id %}" class="btn btn-primary">
-                <i class="fa-solid fa-pencil"></i>
+                <i class="fa-solid fa-pencil"></i> Editar
             </a>
             <a href="{% url 'discos:delete_category' category.id %}" class="btn btn-danger">
-                <i class="fa-solid fa-trash"></i>
+                <i class="fa-solid fa-trash"></i> Eliminar
             </a>
         </td>
     </tr>

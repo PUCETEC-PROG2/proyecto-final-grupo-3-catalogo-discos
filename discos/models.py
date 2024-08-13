@@ -39,12 +39,20 @@ class Customer(models.Model):
     def __str__(self) -> str:
         return self.name
     
+
 class Purchase(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)   
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     date = models.DateField(null=False)
-    total_price = models.DecimalField(null=False, default=1,max_digits=4,decimal_places=2)
-    
+    total_price = models.DecimalField(null=False, default=1,max_digits=10,decimal_places=2)
+    products = models.ManyToManyField(Product, through='PurchaseProduct')
     def __str__(self) -> str:
         return f'Purchase by {self.customer.name} on {self.date}'
 
+class PurchaseProduct(models.Model):
+    purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    def __str__(self) -> str:
+        return f'{self.quantity} of {self.product.title} in purchase {self.purchase.id}'
+    

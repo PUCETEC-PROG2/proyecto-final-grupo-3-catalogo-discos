@@ -2,6 +2,21 @@
 {% block title %}Clientes{% endblock title %}
 {% block content %}
 <h1>Clientes</h1>
+
+<style>
+    .btn-spacing {
+        margin-right: 15px; /* Puedes ajustar el valor según necesites */
+    }
+</style>
+<div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'discos:add_customer' %}" class="btn btn-success btn-spacing">
+        <i class="fa-solid fa-plus"></i> Añadir Cliente
+    </a>
+    <a href="{% url 'discos:index' %}" class="btn btn-secondary float-end">
+        <i class="fa-solid fa-house"></i> Regresar al Inicio
+    </a>
+</div>
+
 <table class="table">
     <tr>
         <th>ID</th>

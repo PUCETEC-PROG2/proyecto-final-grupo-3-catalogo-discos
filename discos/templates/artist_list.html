@@ -2,6 +2,12 @@
 {% block title %}Artistas{% endblock title %}
 {% block content %}
 <h1>Artistas</h1>
+<div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'discos:add_artist' %}" class="btn btn-success mr-2">
+        <i class="fa-solid fa-plus"></i>Añadir Artista</a>
+    <a href="{% url 'discos:index' %}" class="btn btn-secondary">
+        <i class="fa-solid fa-house"></i> Regresar al Inicio</a>
+</div>
 <table class="table">
     <tr>
         <th>ID</th>
