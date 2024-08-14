@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 
 from discos.forms import CustomerForm, CategoryForm,ArtistForm, ProductForm, PurchaseForm
-from .models import Customer, Category,Artist, Product,Purchase
+from .models import Customer, Category,Artist, Product,Purchase, PurchaseProduct
 from .forms import PurchaseForm
 
 def customer_list(request):
@@ -35,7 +35,7 @@ def index(request):
 
 def customer(request, customer_id):
     customer = get_object_or_404(Customer, pk=customer_id)
-    template = loader.get_template('display_customer.html')
+    template = loader.get_template('customer_list.html')
     context = {
         'customer': customer
     }
@@ -43,7 +43,7 @@ def customer(request, customer_id):
 
 def category(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
-    template = loader.get_template('display_category.html')
+    template = loader.get_template('category_list.html')
     context = {
         'category': category
     }
@@ -51,7 +51,7 @@ def category(request, category_id):
 
 def artist(request, artist_id):
     artist = get_object_or_404(Artist, pk=artist_id)
-    template = loader.get_template('display_artist.html')
+    template = loader.get_template('artist_list.html')
     context = {
         'artist': artist
     }
@@ -59,19 +59,23 @@ def artist(request, artist_id):
 
 def product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    template = loader.get_template('display_product.html')
+    template = loader.get_template('product_list.html')
     context = {
         'product': product
     }
     return HttpResponse(template.render(context, request))
 
+
 def purchase(request, purchase_id):
     purchase = get_object_or_404(Purchase, pk=purchase_id)
-    template = loader.get_template('display_purchase.html')
+    purchase_products = PurchaseProduct.objects.filter(purchase=purchase)
     context = {
-        'purchase': purchase
+        'purchase': purchase,
+        'purchase_products': purchase_products,
     }
-    return HttpResponse(template.render(context, request))
+    return render(request, 'display_purchase.html', context)
+
+
 
 #CUSTOMER
 @login_required
@@ -220,34 +224,7 @@ def add_purchase(request):
     
     return render(request, 'purchase_form.html', {'form': form})
 
-#revisar bien esto
-@login_required
-def view_cart(request):
-    cart = request.session.get('cart', {})
-    total_price = sum(item['price'] * item['quantity'] for item in cart.values())
-
-    if request.method == 'POST':
-        form = PurchaseForm(request.POST)
-        if form.is_valid():
-            purchase = form.save(commit=False)
-            purchase.total_price = total_price
-            purchase.save()
-
-            for product_id, item in cart.items():
-                product = Product.objects.get(id=product_id)
-                PurchaseProduct.objects.create(
-                    purchase=purchase,
-                    product=product,
-                    quantity=item['quantity']
-                )
-
-            request.session['cart'] = {}  # Vaciar el carrito después de la compra
-            return redirect('discos:purchase_list')
-    else:
-        form = PurchaseForm()
-
-    return render(request, 'view_cart.html', {'cart': cart, 'total_price': total_price, 'form': form})
-
+#AÑADIR AL CARRITO
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -264,7 +241,41 @@ def add_to_cart(request, product_id):
 
     request.session['cart'] = cart
     return redirect('discos:product_list')
-#esto tambien 
+
+@login_required
+def view_cart(request):
+    cart = request.session.get('cart', {})
+    total_price = sum(float(item['price']) * item['quantity'] for item in cart.values())
+
+    if request.method == 'POST':
+        form = PurchaseForm(request.POST)
+        if form.is_valid():
+            # Crear la compra
+            purchase = form.save(commit=False)
+            purchase.total_price = total_price
+            purchase.save()
+
+            # Crear registros en PurchaseProduct
+            for product_id, item in cart.items():
+                product = Product.objects.get(id=product_id)
+                PurchaseProduct.objects.create(
+                    purchase=purchase,
+                    product=product,
+                    quantity=item['quantity']
+                )
+                # Actualizar la cantidad del producto
+                product.quantity -= item['quantity']
+                product.save()
+
+            # Vaciar el carrito después de la compra
+            request.session['cart'] = {}
+            return redirect('discos:purchase_list')
+        else:
+            print("Formulario no válido:", form.errors)  # Agregado para depuración
+    else:
+        form = PurchaseForm()
+
+    return render(request, 'view_cart.html', {'cart': cart, 'total_price': total_price, 'form': form})
 
 
 class CustomLoginView(LoginView):

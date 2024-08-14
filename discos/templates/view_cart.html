@@ -2,7 +2,11 @@
 {% block title %}Carrito de Compras{% endblock title %}
 {% block content %}
 <h1>Carrito de Compras</h1>
-
+<div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'discos:product_list' %}" class="btn btn-secondary">
+        <i class="fa-solid fa-house"></i> Regresar
+    </a>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -15,10 +19,10 @@
     <tbody>
         {% for product_id, item in cart.items %}
         <tr>
-            <td>{{ item.product.title }}</td>
+            <td>{{ item.title }}</td>
             <td>{{ item.quantity }}</td>
             <td>{{ item.price }}</td>
-            <td>{{ item.price|floatformat:2 }}</td>
+            <td>{{ total_price }}</td>
         </tr>
         {% endfor %}
     </tbody>

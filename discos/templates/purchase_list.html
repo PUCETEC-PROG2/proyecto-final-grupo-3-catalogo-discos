@@ -3,8 +3,6 @@
 {% block content %}
 <h1>Compras</h1>
 <div class="d-flex justify-content-end mb-3">
-    <a href="{% url 'discos:add_purchase' %}" class="btn btn-success mr-2">
-        <i class="fa-solid fa-plus"></i>Añadir Compra</a>
     <a href="{% url 'discos:index' %}" class="btn btn-secondary">
         <i class="fa-solid fa-house"></i> Regresar al Inicio</a>
 </div>
@@ -13,17 +11,21 @@
     <tr>
         <th>ID</th>
         <th>Cliente</th>
-        <th>Categoría</th>
         <th>Fecha</th>
         <th>Precio Total</th>
+        <th>Acciones</th>
     </tr>
     {% for purchase in purchases %}
     <tr>
         <td>{{ purchase.id }}</td>
         <td>{{ purchase.customer.name }}</td>
-        <td>{{ purchase.category.category_name }}</td>
         <td>{{ purchase.date }}</td>
         <td>{{ purchase.total_price }}</td>
+        <td>
+            <a href="{% url 'discos:display_purchase' purchase.id %}" class="btn btn-primary">
+                <i class="fa-solid fa-eye"></i> 
+            </a>
+        </td>
     </tr>
     {% endfor %}
 </table>

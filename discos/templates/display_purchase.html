@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Detalle de Compra{% endblock title %}
+{% block content %}
+<h1>Detalle de la Compra</h1>
+<div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'discos:purchase_list' %}" class="btn btn-secondary">
+        <i class="fa-solid fa-arrow-left"></i> Regresar a la lista de compras</a>
+</div>
+
+<table class="table">
+    <tr>
+        <th>ID de Compra</th>
+        <td>{{ purchase.id }}</td>
+    </tr>
+    <tr>
+        <th>Cliente</th>
+        <td>{{ purchase.customer.name }}</td>
+    </tr>
+    <tr>
+        <th>Cédula del Cliente</th>
+        <td>{{ purchase.customer.identity_card }}</td>
+    </tr>
+    <tr>
+        <th>Fecha</th>
+        <td>{{ purchase.date }}</td>
+    </tr>
+    <tr>
+        <th>Precio Total</th>
+        <td>{{ purchase.total_price }}</td>
+    </tr>
+</table>
+
+<h3>Productos Comprados:</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in purchase_products %}
+            <tr>
+                <td>{{ item.product.title }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.product.price }}</td>
+                <td>{{ purchase.total_price }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %} 

@@ -42,7 +42,6 @@ class Customer(models.Model):
 
 class Purchase(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)   
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     date = models.DateField(null=False)
     total_price = models.DecimalField(null=False, default=1,max_digits=10,decimal_places=2)
     products = models.ManyToManyField(Product, through='PurchaseProduct')

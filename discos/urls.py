@@ -37,7 +37,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
     # Purchase URL
-    path('purchase/<int:purchase_id>/', views.purchase, name='purchase'),
+    path('purchase/<int:purchase_id>/', views.purchase, name='display_purchase'),
     path('purchase/add/', views.add_purchase, name='add_purchase'),
 
 

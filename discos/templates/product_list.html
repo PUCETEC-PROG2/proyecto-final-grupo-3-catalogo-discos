@@ -3,10 +3,15 @@
 {% block content %}
 <h1>Productos</h1>
 <div class="d-flex justify-content-end mb-3">
-    <a href="{% url 'discos:add_product' %}" class="btn btn-success mr-2">
-        <i class="fa-solid fa-plus"></i>Añadir Producto</a>
-    <a href="{% url 'discos:index' %}" class="btn btn-secondary">
-        <i class="fa-solid fa-house"></i> Regresar al Inicio</a>
+    <a href="{% url 'discos:add_product' %}" class="btn btn-success" style="margin-right: 10px;">
+        <i class="fa-solid fa-plus"></i> Añadir Producto
+    </a>
+    <a href="{% url 'discos:index' %}" class="btn btn-secondary" style="margin-right: 10px;">
+        <i class="fa-solid fa-house"></i> Regresar al Inicio
+    </a>
+    <a href="{% url 'discos:view_cart' %}" class="btn btn-success">
+        <i class="fa-solid fa-shopping-cart"></i> Carrito de Compras
+    </a>
 </div>
 
 <table class="table">
@@ -20,7 +25,7 @@
         <th>Artista</th>
         <th>Categoría</th>
         <th>Imagen</th>
-        <th></th>
+        <th>Acciones</th>
     </tr>
     {% for product in products %}
     <tr>
@@ -37,10 +42,10 @@
         </td>
         <td>
             <a href="{% url 'discos:edit_product' product.id %}" class="btn btn-primary">
-                <i class="fa-solid fa-pencil"></i>
+                <i class="fa-solid fa-pencil"></i> Editar 
             </a>
             <a href="{% url 'discos:delete_product' product.id %}" class="btn btn-danger">
-                <i class="fa-solid fa-trash"></i>
+                <i class="fa-solid fa-trash"></i> Eliminar
             </a>
             <form method="post" action="{% url 'discos:add_to_cart' product.id %}">
                 {% csrf_token %}
