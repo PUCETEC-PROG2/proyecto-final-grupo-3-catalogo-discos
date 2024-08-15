@@ -30,9 +30,18 @@
             <a href="{% url 'discos:edit_artist' artist.id %}" class="btn btn-primary">
                 <i class="fa-solid fa-pencil"></i> Editar
             </a>
-            <a href="{% url 'discos:delete_artist' artist.id %}" class="btn btn-danger">
-                <i class="fa-solid fa-trash"></i> Eliminar
-            </a>
+            <form method="POST" action="{% url 'discos:delete_artist' artist.id %}" onsubmit="return confirmDeletion();">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    <i class="fa-solid fa-trash"></i> Eliminar
+                </button>
+            </form>
+            
+            <script>
+                function confirmDeletion() {
+                    return confirm('¿Estás seguro de que deseas eliminar este artista?');
+                }
+            </script>
         </td>
     </tr>
     {% endfor %}

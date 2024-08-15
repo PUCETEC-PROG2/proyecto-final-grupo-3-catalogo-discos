@@ -39,9 +39,18 @@
             <a href="{% url 'discos:edit_customer' customer.id %}" class="btn btn-primary">
                 <i class="fa-solid fa-pencil"></i> Editar 
             </a>
-            <a href="{% url 'discos:delete_customer' customer.id %}" class="btn btn-danger">
-                <i class="fa-solid fa-trash"></i> Eliminar
-            </a>
+            <form method="POST" action="{% url 'discos:delete_customer' customer.id %}" onsubmit="return confirmDeletion();">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    <i class="fa-solid fa-trash"></i> Eliminar
+                </button>
+            </form>
+            
+            <script>
+                function confirmDeletion() {
+                    return confirm('¿Estás seguro de que deseas eliminar este cliente?');
+                }
+            </script>
         </td>
     </tr>
     {% endfor %}
