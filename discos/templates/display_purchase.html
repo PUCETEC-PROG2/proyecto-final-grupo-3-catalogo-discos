@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load custom_filters %}
 {% block title %}Detalle de Compra{% endblock title %}
 {% block content %}
 <h1>Detalle de la Compra</h1>
@@ -46,7 +47,7 @@
                 <td>{{ item.product.title }}</td>
                 <td>{{ item.quantity }}</td>
                 <td>{{ item.product.price }}</td>
-                <td>{{ purchase.total_price }}</td>
+                <td>{{ item.product.price|floatformat:2|multiply:item.quantity  }}</td>
             </tr>
         {% endfor %}
     </tbody>
