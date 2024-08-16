@@ -1,7 +1,9 @@
 {% extends "base.html" %}
+{% load custom_filters %}
 {% block title %}Carrito de Compras{% endblock title %}
 {% block content %}
 <h1>Carrito de Compras</h1>
+
 <div class="d-flex justify-content-end mb-3">
     <a href="{% url 'discos:product_list' %}" class="btn btn-secondary">
         <i class="fa-solid fa-house"></i> Regresar
@@ -12,8 +14,9 @@
         <tr>
             <th>Producto</th>
             <th>Cantidad</th>
-            <th>Precio</th>
-            <th>Total</th>
+            <th>Precio Unitario</th>
+            <th>Total por producto</th>
+            <th>Acciones</th> 
         </tr>
     </thead>
     <tbody>
@@ -21,14 +24,22 @@
         <tr>
             <td>{{ item.title }}</td>
             <td>{{ item.quantity }}</td>
-            <td>{{ item.price }}</td>
-            <td>{{ total_price }}</td>
+            <td>${{ item.price|floatformat:2 }}</td>
+            <td>${{ item.price|floatformat:2|multiply:item.quantity }}</td>
+            <td>
+                <form method="POST" action="{% url 'discos:remove_from_cart' product_id %}" id="remove-form-{{ product_id }}">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-danger" onclick="confirmDeletion('{{ item.title }}', {{ product_id }})">
+                        <i class="fa-solid fa-trash"></i> Eliminar
+                    </button>
+                </form>
+            </td> 
         </tr>
         {% endfor %}
     </tbody>
 </table>
 
-<h3>Total: ${{ total_price }}</h3>
+<h3>Total: ${{ total_price|floatformat:2 }}</h3>
 
 <form method="POST" action="{% url 'discos:view_cart' %}">
     {% csrf_token %}
@@ -40,4 +51,13 @@
     </div>
     <button type="submit" class="btn btn-success">Proceder con la compra</button>
 </form>
+
+<script>
+function confirmDeletion(productTitle, productId) {
+    if (confirm(`¿Deseas eliminar ${productTitle} del carrito?`)) {
+        document.getElementById(`remove-form-${productId}`).submit();
+    }
+}
+</script>
+
 {% endblock %}

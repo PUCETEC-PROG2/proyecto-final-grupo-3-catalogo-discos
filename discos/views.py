@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from discos.forms import CustomerForm, CategoryForm,ArtistForm, ProductForm, PurchaseForm
 from .models import Customer, Category,Artist, Product,Purchase, PurchaseProduct
 from .forms import PurchaseForm
+from django.contrib import messages
+
 
 def customer_list(request):
     customers = Customer.objects.all()
@@ -276,6 +278,25 @@ def view_cart(request):
         form = PurchaseForm()
 
     return render(request, 'view_cart.html', {'cart': cart, 'total_price': total_price, 'form': form})
+
+
+@login_required
+def remove_from_cart(request, product_id):
+    cart = request.session.get('cart', {})
+
+    if str(product_id) in cart:  # Asegúrate de que estás comparando el `product_id` como string
+        if cart[str(product_id)]['quantity'] > 1:
+            cart[str(product_id)]['quantity'] -= 1
+        else:
+            del cart[str(product_id)]
+        
+        # Actualizar la sesión con el carrito modificado
+        request.session['cart'] = cart
+        messages.success(request, "Cantidad del producto actualizada en el carrito.")
+    else:
+        messages.error(request, "El producto no se encontró en el carrito.")
+
+    return redirect('discos:view_cart')
 
 
 class CustomLoginView(LoginView):
