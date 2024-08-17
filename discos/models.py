@@ -2,7 +2,7 @@ from django.db import models
 
 class Artist(models.Model):
     ARTIST_TYPES = [
-        ('Artista', 'Artista'),
+        ('Solista', 'Solista'),
         ('Banda', 'Banda'),
         ('Dúo', 'Dúo'),
     ]
