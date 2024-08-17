@@ -7,7 +7,7 @@ class Artist(models.Model):
         ('Dúo', 'Dúo'),
     ]
     name = models.CharField(max_length=30, null=False)
-    artist_type = models.CharField(max_length=30, choices=ARTIST_TYPES, default='Artista')
+    artist_type = models.CharField(max_length=30, choices=ARTIST_TYPES, default='Solista')
     country = models.CharField(max_length=30, null=False)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     picture = models.ImageField(upload_to='artist_images')  
