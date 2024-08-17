@@ -14,6 +14,7 @@
         <th>Nombre</th>
         <th>País</th>
         <th>Categoría</th>
+        <th>Tipo de Artista</th>
         <th>Imagen</th>
         <th>Acciones</th>
     </tr>
@@ -23,6 +24,7 @@
         <td>{{ artist.name }}</td>
         <td>{{ artist.country }}</td>
         <td>{{ artist.category.category_name }}</td>
+        <td>{{ artist.artist_type }}</td>
         <td>
             <img src="{{ artist.picture.url }}" alt="{{ artist.name }}" style="width: 100px; height: auto;">
         </td>

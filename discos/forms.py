@@ -41,12 +41,14 @@ class ArtistForm(forms.ModelForm):
             'country': 'País de Origen',
             'category': 'Categoría',
             'picture': 'Foto del Artista',
+            'artist_type': 'Tipo de Artista',
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'country': forms.TextInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
-            'picture': forms.ClearableFileInput(attrs={'class': 'form-control-file'})
+            'picture': forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+            'artist_type': forms.Select(attrs={'class': 'form-control'})
         } 
 
 class ProductForm(forms.ModelForm):

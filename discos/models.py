@@ -1,10 +1,17 @@
 from django.db import models
 
 class Artist(models.Model):
+    ARTIST_TYPES = [
+        ('Artista', 'Artista'),
+        ('Banda', 'Banda'),
+        ('Dúo', 'Dúo'),
+    ]
     name = models.CharField(max_length=30, null=False)
+    artist_type = models.CharField(max_length=30, choices=ARTIST_TYPES, default='Artista')
     country = models.CharField(max_length=30, null=False)
-    picture = models.ImageField(upload_to='artist_images')  
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to='artist_images')  
+    
 
     def __str__(self) -> str:
         return self.name
